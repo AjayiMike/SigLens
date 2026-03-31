@@ -1,0 +1,82 @@
+:root {
+  --bg: #0d1522;
+  --panel: #13233a;
+  --line: #2f4765;
+  --text: #ebf6ff;
+  --muted: #a8bdd6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Space Grotesk', 'Avenir Next', sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top right, #3b2d17 0%, transparent 45%),
+    radial-gradient(circle at top left, #17334f 0%, transparent 45%),
+    var(--bg);
+}
+
+main {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+section {
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel);
+  padding: 12px;
+}
+
+label,
+h2,
+p {
+  margin: 0 0 8px;
+}
+
+input,
+select,
+button {
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #0f1b2d;
+  color: var(--text);
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+button {
+  margin-left: 8px;
+  background: linear-gradient(90deg, #1c4c3d, #5a4026);
+  cursor: pointer;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.checkbox-row input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
