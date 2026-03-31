@@ -1,45 +1,79 @@
 # SigLens
 
-SigLens is a WXT browser extension for EVM selector/signature workflows.
+SigLens is a browser extension for EVM selector/signature workflows.
 
-## Implemented v1 scope
+It helps you quickly move between raw calldata/selectors and human-readable signatures without leaving your explorer or dev flow.
 
-- Selector lookup with provider fallback:
-  - Primary: Sourcify 4byte API
-  - Fallback: 4byte.directory API
-- Signature hash tab:
-  - Function signature -> selector
-  - Event signature -> topic0 hash
-- Interface parser tab:
-  - Parse Solidity function declarations
-  - Produce canonical signatures + selectors
-  - Copy as plain text, CSV, and Markdown
-- Decode tab:
-  - Calldata selector extraction
-  - Candidate signature resolution
-  - Best-effort argument decode from selected signature
-- Settings page:
-  - Cache TTL (days)
-  - Preferred provider order
-  - Clear cache
-  - Clear history
-  - Explorer enhancement toggle
-- Explorer enhancement content script:
-  - Runs on Etherscan and Blockscout
-  - Detects `0x????????` selectors in page text
-  - Resolves signature candidates on hover
-- Background-centered orchestration:
-  - Typed message commands
-  - Structured error responses
-  - Lookup history persistence
-  - Selector cache with TTL
+## What it does
 
-## Quick start
+- Lookup: `0xa9059cbb` -> candidate function signatures (with provider fallback + cache)
+- Hash: `transfer(address,uint256)` -> selector, event signature -> topic hash
+- Interface Parser: Solidity function declarations -> canonical signatures + selectors
+- Decode (best effort): calldata + selected candidate signature -> decoded argument table
+- Explorer Enhancement: hover raw selectors on explorer pages to resolve likely signatures
+
+## Explorer support
+
+Content script enhancements are currently enabled for:
+
+- `etherscan.io` (+ common Etherscan-family explorers)
+- `blockscout.com`
+
+Use **Settings** to enable/disable explorer enhancement.
+
+## Important accuracy note
+
+Selector lookup and calldata decode are **best-effort** based on public signature databases (Sourcify 4byte + 4byte.directory).
+
+- Results are candidates, not guaranteed verified ABI truth.
+- Selector collisions are possible and surfaced in UI.
+
+## Stack
+
+- WXT
+- React + TypeScript (strict)
+- Zod validation
+- Vitest tests
+
+## Project structure
+
+- `src/entrypoints/`
+  - `background.ts` shared orchestration + messaging
+  - `popup/` main UI
+  - `options/` settings UI
+  - `explorer-enhancer.content.ts` explorer page augmentation
+- `src/features/` domain use-cases
+- `src/infrastructure/` API/storage/cache/messaging
+- `src/test/` unit tests
+
+## Local development
+
+### Requirements
+
+- Node.js 20+
+- pnpm 10+
+
+### Install
 
 ```bash
 pnpm install
+```
+
+### Run in dev mode
+
+```bash
 pnpm dev
 ```
+
+### Build extension
+
+```bash
+pnpm build
+```
+
+Load unpacked from:
+
+- `.output/chrome-mv3`
 
 ## Scripts
 
@@ -52,16 +86,32 @@ pnpm typecheck
 pnpm test
 ```
 
-## Architecture
+## Current milestone status
 
-- `src/entrypoints/background.ts`: message handling + shared orchestration
-- `src/entrypoints/popup/*`: Lookup, Hash, Interface UI
-- `src/entrypoints/options/*`: settings UI
-- `src/features/*`: hash/lookup/parser use-cases
-- `src/infrastructure/*`: API clients, cache/history/storage, messaging
-- `src/domain/*`: core types
-- `src/test/*`: unit tests
+- Milestone 0: bootstrap/skeleton ✅
+- Milestone 1: local hashing ✅
+- Milestone 2: selector lookup + provider fallback + cache ✅
+- Milestone 3: interface parser ✅
+- Milestone 4: history + settings ✅
+- Milestone 5: calldata decode (best effort) ✅
+- Milestone 6: explorer enhancement (Etherscan + Blockscout) ✅
 
-## Notes
+## Contributing
 
-Selector lookup and calldata decode are public signature database best-effort flows, not verified ABI truth. Collisions are surfaced in the UI.
+Issues and PRs are welcome.
+
+When contributing:
+
+- keep business logic out of React components
+- keep APIs typed and validated
+- run `pnpm lint && pnpm typecheck && pnpm test` before submitting
+
+## Security and privacy
+
+- No account required
+- No analytics included by default
+- Lookup/history data stored locally in extension storage
+
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md).
